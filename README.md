@@ -1,14 +1,8 @@
 # 📘 Tech Challenge - Fase 2
 
-## API de Blogging (Node.js)
-
-API REST desenvolvida para gerenciamento de postagens em uma plataforma de ensino, permitindo que professores criem conteúdos e alunos consumam essas informações de forma centralizada.
-
----
-
 ## 📌 Objetivo do Projeto
 
-Este projeto faz parte do **Tech Challenge - Fase 2**, cujo objetivo é refatorar o back-end de uma aplicação de blogging utilizando Node.js, garantindo escalabilidade, organização e boas práticas de desenvolvimento.
+Este projeto faz parte do **Tech Challenge - Fase 2**, cujo objetivo é criar uma API REST seguindo os requisitos funcionais.
 
 ---
 
@@ -38,8 +32,8 @@ Este projeto faz parte do **Tech Challenge - Fase 2**, cujo objetivo é refatora
 ### 📥 Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/tech-challenge.git
-cd tech-challenge
+git clone https://github.com/Joao-Cercena/tech-challenge-2.git
+cd tech-challenge-2
 ```
 
 ---
@@ -84,32 +78,20 @@ npm run dev
 
 ---
 
-## 🏗️ Arquitetura da Aplicação
-
-O projeto segue uma **arquitetura em camadas**, separando responsabilidades para melhor manutenção e escalabilidade.
-
-```
-ROUTE → CONTROLLER → SERVICE → DATABASE
-```
 
 ### 📂 Estrutura de pastas
 
 ```
 src/
 ┣ controllers/
+┣ middlewares/
 ┣ routes/
 ┣ services/
+┣ tests/
 ┣ app.js
 ┣ server.js
 ┗ database.js
 ```
-
-### 📌 Descrição das camadas
-
-* **Routes** → Define os endpoints da API
-* **Controllers** → Recebe requisições e retorna respostas
-* **Services** → Contém a lógica de negócio
-* **Database** → Integração com banco via Prisma
 
 ---
 
@@ -182,6 +164,16 @@ POST /posts
 PUT /posts/:id
 ```
 
+**Body:**
+
+```json
+{
+  "title": "Título do post atualizadp",
+  "content": "Conteúdo do post atualizado",
+  "author": "Autor atualizado"
+}
+```
+
 ---
 
 #### ✅ Deletar post
@@ -210,16 +202,6 @@ GET /posts/search?q=termo
 ```bash
 npm test
 ```
-
-### 📊 Cobertura atual
-
-* ✔ ~79% statements
-* ✔ ~76% branches
-* ✔ 100% functions
-
-✅ Atende ao requisito mínimo de 20%
-
----
 
 ## 🐳 Docker
 
@@ -261,24 +243,3 @@ Executado em:
 * ✔ Docker configurado
 * ✔ Testes automatizados
 * ✔ CI/CD funcional
-
----
-
-## 🚀 Melhorias Futuras
-
-* Autenticação com JWT
-* Documentação com Swagger
-* Validação com Zod ou Joi
-* Middleware global de erros
-* Testes mais robustos (erros 500)
-
----
-
-## 📌 Considerações Finais
-
-Este projeto foi desenvolvido com foco em:
-
-* Boas práticas de desenvolvimento
-* Organização de código
-* Testabilidade
-* Pronto para ambiente profissional e portfólio
