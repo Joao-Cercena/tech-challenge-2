@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tech_challenge
+
     services:
       postgres:
         image: postgres:15
@@ -41,8 +44,6 @@ jobs:
         run: |
           npx prisma generate
           npx prisma migrate deploy
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tech_challenge
 
       - name: Testes
         run: npm test
