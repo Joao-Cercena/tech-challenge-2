@@ -1,245 +1,153 @@
-# 📘 Tech Challenge - Fase 2
+# Tech Challenge - Full Stack (Fase 3)
 
-## 📌 Objetivo do Projeto
+Aplicação de blogging full stack com:
+- Back-end REST em Node.js + Express + Prisma + PostgreSQL
+- Front-end em React para consumo dos endpoints e gestão de postagens
 
-Este projeto faz parte do **Tech Challenge - Fase 2**, cujo objetivo é criar uma API REST seguindo os requisitos funcionais.
+## Objetivo
+Implementar a interface gráfica da aplicação de blogging para docentes e estudantes, consumindo os endpoints REST já existentes no back-end.
 
----
+## Stack
 
-## 🚀 Tecnologias Utilizadas
+### Back-end
+- Node.js
+- Express
+- Prisma ORM
+- PostgreSQL
+- Jest + Supertest
 
-* Node.js
-* Express
-* PostgreSQL
-* Prisma ORM (v5)
-* Docker / Docker Compose
-* Jest (testes)
-* Supertest
-* GitHub Actions (CI/CD)
+### Front-end
+- React
+- React Router
+- Fetch API
+- CSS responsivo (layout adaptável para mobile e desktop)
 
----
-
-## ⚙️ Setup do Projeto
-
-### 🔧 Pré-requisitos
-
-* Node.js (versão LTS)
-* Docker + Docker Compose
-* NPM
-
----
-
-### 📥 Clonar o repositório
+## Estrutura
 
 ```bash
-git clone https://github.com/Joao-Cercena/tech-challenge-2.git
-cd tech-challenge-2
+.
+├── src/                    # Back-end (API)
+├── prisma/                 # Schema + migrations
+├── frontend/               # Front-end React
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── context/
+│   │   └── pages/
+│   └── Dockerfile
+├── docker-compose.yml
+└── Dockerfile              # Back-end
 ```
 
----
+## Requisitos de ambiente
+- Node.js (LTS)
+- Docker + Docker Compose
+- NPM
 
-### 🔐 Variáveis de ambiente
+## Variáveis de ambiente
 
-Crie um arquivo `.env` na raiz do projeto:
-
+### Back-end (`.env` na raiz)
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/tech_challenge"
 ```
 
----
+### Front-end (`frontend/.env`)
+Use o arquivo de exemplo:
+```bash
+cp frontend/.env.example frontend/.env
+```
 
-### 🐳 Rodando com Docker (recomendado)
+Conteúdo padrão:
+```env
+VITE_API_URL=http://localhost:3000
+VITE_PROFESSOR_USER=professor
+VITE_PROFESSOR_PASSWORD=123456
+```
 
+## Como executar
+
+### Opção 1: Docker (recomendado)
 ```bash
 docker compose up --build
 ```
 
-Isso irá subir:
+Serviços:
+- API: `http://localhost:3000`
+- Front-end: `http://localhost:5173`
+- PostgreSQL: `localhost:5432`
 
-* API Node.js (porta 3000)
-* Banco PostgreSQL (porta 5432)
+### Opção 2: Local (sem Docker)
 
----
-
-### 🧱 Rodando migrations
-
-```bash
-npx prisma migrate dev
-```
-
----
-
-### ▶️ Rodando localmente (sem Docker)
-
+#### Back-end
 ```bash
 npm install
 npm run dev
 ```
 
----
-
-
-### 📂 Estrutura de pastas
-
-```
-src/
-┣ controllers/
-┣ middlewares/
-┣ routes/
-┣ services/
-┣ tests/
-┣ app.js
-┣ server.js
-┗ database.js
+#### Front-end
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
----
+## Banco de dados
+Modelo principal: `Post`
+- `id` (Int, PK)
+- `title` (String)
+- `content` (String)
+- `author` (String)
+- `createdAt` (DateTime)
+- `updatedAt` (DateTime)
 
-## 🗄️ Banco de Dados
-
-Banco relacional utilizando PostgreSQL com ORM Prisma.
-
-### 📄 Modelo: Post
-
-```
-id          Int (PK)
-title       String
-content     String
-author      String
-createdAt   DateTime
-updatedAt   DateTime
+Migration:
+```bash
+npx prisma migrate dev
 ```
 
----
+## Endpoints da API
+Base URL: `http://localhost:3000`
 
-## 🌐 Guia de Uso da API
+- `GET /posts` - listar posts
+- `GET /posts/:id` - buscar post por ID
+- `POST /posts` - criar post
+- `PUT /posts/:id` - atualizar post
+- `DELETE /posts/:id` - excluir post
+- `GET /posts/search?q=termo` - busca textual
 
-### 🔹 Base URL
+## Front-end (React)
 
-```
-http://localhost:3000
-```
+### Páginas implementadas
+- Página principal (lista de posts + busca)
+- Página de leitura de post
+- Página de criação de postagens
+- Página de edição de postagens
+- Página administrativa (listar/editar/excluir)
+- Login de professor
 
----
+### Autenticação e autorização
+A autenticação está implementada no front-end com credenciais de professor via variáveis de ambiente. As rotas abaixo são protegidas:
+- `/posts/new`
+- `/posts/:id/edit`
+- `/admin`
 
-### 📌 Endpoints
+### Arquitetura do front-end
+- `src/api/postsApi.js`: camada de integração com API REST
+- `src/context/AuthContext.jsx`: estado global de autenticação
+- `src/components/ProtectedRoute.jsx`: guarda de rotas privadas
+- `src/pages/*`: páginas por responsabilidade
 
-#### ✅ Listar todos os posts
+## Testes
 
-```http
-GET /posts
-```
-
----
-
-#### ✅ Buscar post por ID
-
-```http
-GET /posts/:id
-```
-
----
-
-#### ✅ Criar post
-
-```http
-POST /posts
-```
-
-**Body:**
-
-```json
-{
-  "title": "Título do post",
-  "content": "Conteúdo do post",
-  "author": "Autor"
-}
-```
-
----
-
-#### ✅ Atualizar post
-
-```http
-PUT /posts/:id
-```
-
-**Body:**
-
-```json
-{
-  "title": "Título do post atualizadp",
-  "content": "Conteúdo do post atualizado",
-  "author": "Autor atualizado"
-}
-```
-
----
-
-#### ✅ Deletar post
-
-```http
-DELETE /posts/:id
-```
-
----
-
-#### ✅ Buscar posts
-
-```http
-GET /posts/search?q=termo
-```
-
----
-
-## 🧪 Testes Automatizados
-
-* Framework: Jest
-* Testes de API: Supertest
-
-### ▶️ Rodar testes
-
+### Back-end
 ```bash
 npm test
+npm run test:coverage
 ```
 
-## 🐳 Docker
+## Observações técnicas
+- CORS habilitado no back-end para permitir consumo da API pelo front-end.
+- O front-end usa `VITE_API_URL` para desacoplar ambiente local e container.
 
-Serviços configurados:
-
-* app → API Node.js
-* db → PostgreSQL
-
-Subir ambiente:
-
-```bash
-docker compose up --build
-```
-
----
-
-## 🤖 CI/CD (GitHub Actions)
-
-Pipeline automatizado para:
-
-* Instalar dependências
-* Rodar migrations
-* Executar testes
-* Validar cobertura
-
-Executado em:
-
-* Push na branch main
-* Pull Requests
-
----
-
-## 📊 Status do Projeto
-
-* ✔ CRUD completo
-* ✔ Busca implementada
-* ✔ Arquitetura em camadas
-* ✔ Banco com Prisma
-* ✔ Docker configurado
-* ✔ Testes automatizados
-* ✔ CI/CD funcional
+## Documentação complementar
+- Arquitetura, uso e relato de desafios: [docs/documentacao-arquitetura-uso-e-desafios.md](docs/documentacao-arquitetura-uso-e-desafios.md)
