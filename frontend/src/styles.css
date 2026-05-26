@@ -151,6 +151,17 @@ p {
   gap: 1.2rem;
 }
 
+.not-found-page {
+  display: grid;
+  gap: 1rem;
+  padding: 1.4rem;
+}
+
+.not-found-page .btn {
+  width: fit-content;
+  margin-top: 0.25rem;
+}
+
 .panel {
   border: 1px solid var(--border);
   border-radius: 1rem;

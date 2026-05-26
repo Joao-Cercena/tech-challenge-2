@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function NotFoundPage() {
   return (
-    <section className="panel">
+    <section className="panel not-found-page">
       <h1>Página não encontrada</h1>
       <p className="muted">Esse endereço não existe na aplicação.</p>
       <Link className="btn" to="/">
