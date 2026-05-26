@@ -1,8 +1,11 @@
 # Tech Challenge - Full Stack (Fase 3)
 
-Aplicação de blogging full stack com:
+Aplicação full stack com:
 - Back-end REST em Node.js + Express + Prisma + PostgreSQL
 - Front-end em React para consumo dos endpoints e gestão de postagens
+
+## Repositório GitHub
+- https://github.com/Joao-Cercena/tech-challenge-2
 
 ## Objetivo
 Implementar a interface gráfica da aplicação de blogging para docentes e estudantes, consumindo os endpoints REST já existentes no back-end.
@@ -148,6 +151,3 @@ npm run test:coverage
 ## Observações técnicas
 - CORS habilitado no back-end para permitir consumo da API pelo front-end.
 - O front-end usa `VITE_API_URL` para desacoplar ambiente local e container.
-
-## Documentação complementar
-- Arquitetura, uso e relato de desafios: [docs/documentacao-arquitetura-uso-e-desafios.md](docs/documentacao-arquitetura-uso-e-desafios.md)
