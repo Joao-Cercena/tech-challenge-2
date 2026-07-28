@@ -52,8 +52,6 @@ export async function request(path, { method = 'GET', token, body } = {}) {
 
   if (!response.ok) {
     if (response.status === 401 && token) {
-      // Só a sessão que enviou este token pode ser invalidada. Uma resposta
-      // atrasada de uma sessão anterior não deve derrubar um login novo.
       await unauthorizedHandler?.(token);
     }
 
