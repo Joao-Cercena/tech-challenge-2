@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deletePost, getPosts } from '../api/postsApi.js';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function AdminPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { token } = useAuth();
 
   async function loadPosts() {
     setLoading(true);
@@ -32,7 +34,7 @@ export default function AdminPage() {
     }
 
     try {
-      await deletePost(id);
+      await deletePost(id, token);
       setPosts((current) => current.filter((post) => post.id !== id));
     } catch (err) {
       setError(err.message || 'Não foi possível excluir o post.');

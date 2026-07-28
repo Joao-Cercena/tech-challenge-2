@@ -1,23 +1,4 @@
-const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
-
-async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    },
-    ...options
-  });
-
-  const raw = await response.text();
-  const body = raw ? JSON.parse(raw) : null;
-
-  if (!response.ok) {
-    throw new Error(body?.error || 'Falha ao processar requisição.');
-  }
-
-  return body;
-}
+import { request } from './apiClient.js';
 
 export function getPosts() {
   return request('/posts');
@@ -31,22 +12,25 @@ export function getPostById(id) {
   return request(`/posts/${id}`);
 }
 
-export function createPost(payload) {
+export function createPost(payload, token) {
   return request('/posts', {
     method: 'POST',
+    authToken: token,
     body: JSON.stringify(payload)
   });
 }
 
-export function updatePost(id, payload) {
+export function updatePost(id, payload, token) {
   return request(`/posts/${id}`, {
     method: 'PUT',
+    authToken: token,
     body: JSON.stringify(payload)
   });
 }
 
-export function deletePost(id) {
+export function deletePost(id, token) {
   return request(`/posts/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    authToken: token
   });
 }

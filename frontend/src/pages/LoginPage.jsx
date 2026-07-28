@@ -9,18 +9,22 @@ export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
 
   const targetPath = location.state?.from || '/admin';
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError('');
+    setBusy(true);
 
     try {
-      login({ username, password });
+      await login({ username, password });
       navigate(targetPath, { replace: true });
     } catch (err) {
       setError(err.message || 'Não foi possível autenticar.');
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -54,8 +58,8 @@ export default function LoginPage() {
             />
           </label>
 
-          <button className="btn" type="submit">
-            Entrar
+          <button className="btn" type="submit" disabled={busy}>
+            {busy ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
       </div>

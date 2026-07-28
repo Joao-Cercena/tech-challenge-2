@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PostForm from '../components/PostForm.jsx';
 import { createPost } from '../api/postsApi.js';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function CreatePostPage() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const { token } = useAuth();
 
   async function handleSubmit(payload) {
     setBusy(true);
     setError('');
 
     try {
-      const post = await createPost(payload);
+      const post = await createPost(payload, token);
       navigate(`/posts/${post.id}`);
     } catch (err) {
       setError(err.message || 'Falha ao criar post.');
