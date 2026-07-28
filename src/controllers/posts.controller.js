@@ -4,24 +4,36 @@ import { getPostsService } from '../services/get-posts.service.js';
 import { updatePostService } from '../services/update-post.service.js';
 import { deletePostService } from '../services/delete-post.service.js';
 import { searchPostsService } from '../services/search-post.service.js';
+import { parseId } from '../utils/validation.js';
 
+function validatePostPayload({ title, content, author }) {
+  if (
+    typeof title !== 'string' || !title.trim() ||
+    typeof content !== 'string' || !content.trim() ||
+    typeof author !== 'string' || !author.trim()
+  ) {
+    return null;
+  }
+
+  return {
+    title: title.trim(),
+    content: content.trim(),
+    author: author.trim()
+  };
+}
 
 //CREATE
 export async function createPost(req, res, next) {
-  const { title, content, author } = req.body;
+  const postData = validatePostPayload(req.body);
 
   try {
-    if (!title || !content || !author) {
+    if (!postData) {
       return res.status(400).json({
         error: 'titulo, descrição e autor são obrigatórios'
       });
     }
 
-    const post = await createPostService({
-      title,
-      content,
-      author
-    });
+    const post = await createPostService(postData);
 
     return res.status(201).json(post);
   } catch (error) {
@@ -41,10 +53,8 @@ export async function getPosts(req, res, next) {
 
 //FIND ONE
 export async function getPost(req, res, next) {
-  const { id } = req.params;
-
   try {
-    const post = await getPostService(id);
+    const post = await getPostService(parseId(req.params.id));
 
     if (!post) {
       return res.status(404).json({
@@ -61,19 +71,16 @@ export async function getPost(req, res, next) {
 
 //UPDATE
 export async function updatePost(req, res, next) {
-  const { id } = req.params;
-  const { title, content, author } = req.body;
+  const postData = validatePostPayload(req.body);
 
   try {
-    if (isNaN(Number(id))) {
-      return res.status(400).json({ error: 'ID inválido' });
+    if (!postData) {
+      return res.status(400).json({
+        error: 'titulo, descrição e autor são obrigatórios'
+      });
     }
 
-    const post = await updatePostService(id, {
-      title,
-      content,
-      author
-    });
+    const post = await updatePostService(parseId(req.params.id), postData);
 
     return res.json(post);
   } catch (error) {
@@ -83,14 +90,8 @@ export async function updatePost(req, res, next) {
 
 //DELETE
 export async function deletePost(req, res, next) {
-  const { id } = req.params;
-
   try {
-    if (isNaN(Number(id))) {
-      return res.status(400).json({ error: 'ID inválido' });
-    }
-
-    await deletePostService(id);
+    await deletePostService(parseId(req.params.id));
 
     return res.json({
       message: 'Post deletado com sucesso'
@@ -105,13 +106,13 @@ export async function searchPosts(req, res, next) {
   const { q } = req.query;
 
   try {
-    if (!q) {
+    if (typeof q !== 'string' || !q.trim()) {
       return res.status(400).json({
         error: 'Query "q" é obrigatória'
       });
     }
 
-    const posts = await searchPostsService(q);
+    const posts = await searchPostsService(q.trim());
 
     return res.json(posts);
   } catch (error) {

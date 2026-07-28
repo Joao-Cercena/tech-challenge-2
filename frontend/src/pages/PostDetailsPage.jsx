@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getPostById } from '../api/postsApi.js';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function PostDetailsPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     async function run() {
@@ -44,9 +46,11 @@ export default function PostDetailsPage() {
         <Link className="btn btn-muted" to="/">
           Voltar
         </Link>
-        <Link className="btn" to={`/posts/${post.id}/edit`}>
-          Editar
-        </Link>
+        {isAuthenticated ? (
+          <Link className="btn" to={`/posts/${post.id}/edit`}>
+            Editar
+          </Link>
+        ) : null}
       </div>
     </article>
   );

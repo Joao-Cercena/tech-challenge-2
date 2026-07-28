@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PostForm from '../components/PostForm.jsx';
 import { getPostById, updatePost } from '../api/postsApi.js';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function EditPostPage() {
   const { id } = useParams();
@@ -10,6 +11,7 @@ export default function EditPostPage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const { token } = useAuth();
 
   useEffect(() => {
     async function run() {
@@ -33,7 +35,7 @@ export default function EditPostPage() {
     setError('');
 
     try {
-      await updatePost(id, payload);
+      await updatePost(id, payload, token);
       navigate(`/posts/${id}`);
     } catch (err) {
       setError(err.message || 'Não foi possível salvar as alterações.');
